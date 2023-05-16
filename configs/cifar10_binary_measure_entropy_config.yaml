@@ -1,0 +1,15 @@
+_comment: "Available options for 'entropy': 'entanglement_entropy_ee', 'entanglement_entropy_ge', 'surrogate'"
+data_dir_name: cifar10_binary
+device: cuda:0
+data_name: train_data.pt
+labels_name: train_labels.pt
+entropy: surrogate
+levels:
+  - 1
+  - 2
+fb_size: 500
+theta: 0.085
+svd_options:
+  vidal_noise: 0.0001
+n_batches: 2
+batch_size: 500

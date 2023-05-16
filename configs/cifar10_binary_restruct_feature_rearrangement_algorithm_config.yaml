@@ -1,0 +1,10 @@
+data_dir_name: cifar10_binary_rand_perm
+data_name: train_data.pt
+restructure_method: feature_rearrangement_algorithm
+feature_rearrangement_algorithm_parameters:
+  cut_method: metis
+  niter_metis: 50000
+  ncuts_metis: 10
+  metis_recursive: true
+  seed_metis: 0
+  num_parts: 4

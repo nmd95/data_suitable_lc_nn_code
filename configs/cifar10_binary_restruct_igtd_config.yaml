@@ -1,0 +1,9 @@
+data_dir_name: cifar10_binary_rand_perm
+data_name: train_data.pt
+restructure_method: igtd
+igtd_parameters:
+  no_imp_counter: 0
+  no_imp_count_threshold: 20
+  no_imp_val_threshold: 0.0
+  device: "cuda:0"
+  t: 1000
