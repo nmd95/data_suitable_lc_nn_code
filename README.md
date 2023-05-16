@@ -79,8 +79,7 @@ The available options for `<script_id>` are:
 - `table_3`
 - `table_1`
 - `table_4`
-- `figure_4`
-- `figure_5`
+- `figure_4` (also for running the experiment of Figure 5)
 - `figure_8`
 
 
