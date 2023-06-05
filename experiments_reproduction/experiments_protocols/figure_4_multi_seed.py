@@ -131,7 +131,7 @@ def main(seed, device):
         "multiple_gpu": False
     }
 
-    n_swaps = [0, 250, 500, 750, 1000, 1250, 1500, 1750, 2000, 2250, 2500]
+    n_swaps = [0, 250, 500, 750, 1000, 1250, 1500, 1750, 2000, 2250, 2500, 2750, 3000, 3250, 3500, 3750, 4000]
 
     e_temp = Experiment(seed=seed, data_dims=data_dims, dim=dim,
                         num_folds=num_folds, data_dir_path=data_dir_path)
@@ -148,7 +148,7 @@ def main(seed, device):
         e_temp.run_baseline_node(node=temp_node, baseline_params=baseline_params_lat)
 
     # Save the experiment
-    save_path = "/home/fodl/nimrodd_new/dl_unstr_qe_code_base_v1/experiments_reproduction/cache_dirs/figure_4_cache_dir"
+    save_path = "experiments_reproduction/cache_dirs/figure_4_cache_dir"
     # append the seed and the device to the save path with .pkl ending
     save_path = os.path.join(save_path, f"seed_{seed}_device_{device}.pkl")
     with open(save_path, 'wb') as f:

@@ -52,7 +52,7 @@ def main(seed, device):
                                     surrogate=True, fold=None)
 
     # Save the experiment
-    save_path = "/home/fodl/nimrodd_new/dl_unstr_qe_code_base_v1/experiments_reproduction/cache_dirs/figure_5_cache_dir"
+    save_path = "experiments_reproduction/cache_dirs/figure_5_cache_dir"
     # append the seed and the device to the save path with .pkl ending
     save_path = os.path.join(save_path, f"seed_{seed}_device_{device}.pkl")
     with open(save_path, 'wb') as f:

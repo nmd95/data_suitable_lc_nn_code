@@ -60,7 +60,7 @@ In order to reproduce the paper's experiments, use the provided bash script `run
 Run the script with the following command line arguments:
 
 ```bash
-./modified_script.sh <device_numbers> <seeds> <script_id>
+./run_experiment.sh <device_numbers> <seeds> <script_id>
 ```
 - `<device_numbers>`: Space-separated list of GPU device numbers to run the experiments on (e.g., "1 2 3 4 5").
 - `<seeds>`: Space-separated list of seed values (e.g., "0 1 2 3 4").
@@ -69,7 +69,7 @@ Run the script with the following command line arguments:
 For example, to run the `table_2_dna_multi_seed.py` experiment on devices 1 to 5 with seeds 0 to 4, execute the following command:
 
 ```bash
-./modified_script.sh "1 2 3 4 5" "0 1 2 3 4" "table_2_dna"
+./run_experiment.sh "1 2 3 4 5" "0 1 2 3 4" "table_2_dna"
 ```
 The available options for `<script_id>` are:
 
@@ -89,11 +89,11 @@ Each experiment requires specific datasets as detailed below:
 - `table_2_dna_multi_seed.py`: `dna` dataset.
 - `table_2_semeion_multi_seed.py`: `semeion` dataset.
 - `table_2_isolet_multi_seed.py`: `isolet` dataset.
-- `table_3.py`: `cifar10` dataset.
-- `table_1.py`: `speech_commands_dim_2048_downsized` dataset.
-- `table_4.py`: `speech_commands_dim_50000` dataset.
-- `figure_4.py`, `figure_5.py`: `binary_speech_commands_4096` dataset.
-- `figure_8.py`: `cifar10_binary` dataset.
+- `table_3_multi_seed.py`: `cifar10` dataset.
+- `table_1_multi_seed.py`: `speech_commands_dim_2048_downsized` dataset.
+- `table_4_multi_seed.py`: `speech_commands_dim_50000` dataset.
+- `figure_4_multi_seed.py`, `figure_5.py`: `binary_speech_commands_4096` dataset.
+- `figure_8_multi_seed.py`: `cifar10_binary` dataset.
 
 ### Plot results
 After running the experiments, you can plot the results using the provided notebook`experiments_reproduction/plot_results.ipynb`.

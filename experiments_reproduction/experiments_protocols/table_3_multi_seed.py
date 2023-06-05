@@ -69,7 +69,7 @@ def main(seed, device):
             e_temp.run_baseline_node(node=rearr_igtd_temp_node, baseline_params=baseline_params_cnn)
 
     # Save the experiment
-    save_path = "/home/fodl/nimrodd_new/dl_unstr_qe_code_base_v1/experiments_reproduction/cache_dirs/table_3_cache_dir"
+    save_path = "experiments_reproduction/cache_dirs/table_3_cache_dir"
     # append the seed and the device to the save path with .pkl ending
     save_path = os.path.join(save_path, f"seed_{seed}_device_{device}.pkl")
     with open(save_path, 'wb') as f:

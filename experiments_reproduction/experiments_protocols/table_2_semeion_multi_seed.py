@@ -1,50 +1,35 @@
 import os
-from experiments_reproduction.experiments_module import Experiment
-import pickle
 import argparse
+import pickle
 
+from experiments_reproduction.experiments_module import Experiment
 
 def main(seed, device):
-    data_dir_path = os.path.join(os.getcwd(), "experiments_reproduction/paper_datasets/binary_speech_commands_4096")
-    dim = 4096
-    data_dims = [4096]
-    num_folds = None
-    num_classes = 2
+    # Config parameters
+    data_dir_path = os.path.join(os.getcwd(), "experiments_reproduction/paper_datasets/semeion")
+    dim = 256
+    data_dims = [256]
+    num_folds = 3
+    num_classes = 10
     device = f"cuda:{str(device)}"
 
-    svd_options = {
-        "vidal_noise": 0.0001,
-    }
-    meas_params_ee = {
-        "run_name": "ave_canonical_at_levels",
-        "levels": [1, 2, 3, 4, 5, 6],
-        "ee": True,
-        "sample_size": 1000,
-        "device": device,
-        "fb_size": 500,
-        "const": 0,
-        "theta": 0.085,
-        "svd_options": svd_options,
-        "batch_size": 500,
-        "n_batches": 2
-    }
-    meas_params_surrogate = {
-        "run_name": "ave_surrogate_canonical_at_levels",
-        "levels": [1, 2, 3, 4, 5, 6],
-        "sample_size": 5610,
-        "device": device,
+    cut_options_cuts = {"cut_method": "metis",
+                        "niter_metis": 50000,
+                        "ncuts_metis": 10,
+                        "metis_recursive": True, "seed_metis": seed, "num_parts": 2}
 
-    }
+    rearr_params_cuts = {"igtd": False, "cut_alg": "metis",
+                         "cut_options": cut_options_cuts,
+                         }
+
+    rearr_params_igtd = {"igtd": True, "no_imp_counter": 0, "no_imp_count_threshold": 20,
+                         "no_imp_val_threshold": 0.0, "device": device, "t": 1000,
+                         }
 
     cnn_epochs = 300
 
-    cnn_model_params = {
-        "n_input": 1,
-        "n_output": num_classes,
-        "kernel_size": 80,
-        "stride": 4,
-        "n_channel": 128
-    }
+    cnn_model_params = {"num_classes": num_classes, "channels_hidden_dim": 32, "num_cnn_layers": 8, "kernel_size": 3,
+                        "stride": 3, "use_batchnorm": True, "pool_size": 3, "act_func": "ReLU", "dropout": 0.0}
     cnn_optimizer_params = {
         "lr": 0.001,
         "weight_decay": 0.0001
@@ -52,12 +37,12 @@ def main(seed, device):
 
     baseline_params_cnn = {
         "run_name": "cnn_baseline",
-        "model_name": "M5",
+        "model_name": "TabularResCNN",
         "model_parameters": cnn_model_params,
         "criterion_name": "CrossEntropyLoss",
         "optimizer_name": "Adam",
         "optimizer_parameters": cnn_optimizer_params,
-        "batch_sizes": [128, 128, 128],
+        "batch_sizes": [64, 64, 64],
         "device": device,
         "num_classes": num_classes,
         "epochs": cnn_epochs,
@@ -70,7 +55,7 @@ def main(seed, device):
     s4_model_params = {
         "d_input": 1,
         "d_output": num_classes,
-        "d_model": 128,
+        "d_model": 64,
         "dropout": 0.0,
         "prenorm": False,
         "lr": 0.001,
@@ -104,9 +89,9 @@ def main(seed, device):
         "dim": 128,
         "depth": 8,
         "num_classes": num_classes,
-        "local_attn_window_size": 10,
-        "dim_head": 64,
-        "heads": 2,
+        "local_attn_window_size": 25,
+        "dim_head": 32,
+        "heads": 4,
         "ff_mult": 4,
         "attn_dropout": 0.0,
         "ff_dropout": 0.0
@@ -130,41 +115,39 @@ def main(seed, device):
         "weights_save_path": None,
         "multiple_gpu": False
     }
+    # Run experiment
+    n_swaps = [-1, 0]
 
-
-    n_swaps = [2750, 3000, 3250, 3500, 3750, 4000]
-    # n_swaps = [0, 250, 500, 750, 1000, 1250, 1500, 1750, 2000, 2250, 2500, 2750, 3000, 3250, 3500, 3750, 4000]
-
-    # Load the experiment
-    # load_path = "/home/fodl/nimrodd_new/dl_unstr_qe_code_base_v1/experiments_reproduction/cache_dirs/figure_4_cache_dir"
-    load_path = "/home/fodl/nimrodd_new/dl_unstr_qe_code_base_v1/experiments_reproduction/cache_dirs/figure_4_afterfix_cache_dir"
-
-    # append the seed and the device to the load path with .pkl ending
-    load_path = os.path.join(load_path, f"seed_{seed}_device_{device}.pkl")
-    with open(load_path, 'rb') as f:
-        e_temp = pickle.load(f)
-
-
+    e_temp = Experiment(seed=seed, data_dims=data_dims, dim=dim,
+                        num_folds=num_folds, data_dir_path=data_dir_path)
     for ns in n_swaps:
         temp_node = e_temp.add_n_swaps_structured_permutation(n_swaps=ns)
-
-        e_temp.entropy_measure_node(node=temp_node, meas_params=meas_params_ee,
-                                    surrogate=False, fold=None)
-        e_temp.entropy_measure_node(node=temp_node, meas_params=meas_params_surrogate,
-                                    surrogate=True, fold=None)
 
         e_temp.run_baseline_node(node=temp_node, baseline_params=baseline_params_cnn)
         e_temp.run_baseline_node(node=temp_node, baseline_params=baseline_params_s4)
         e_temp.run_baseline_node(node=temp_node, baseline_params=baseline_params_lat)
 
-    # Save the experiment
-    save_path = "/home/fodl/nimrodd_new/dl_unstr_qe_code_base_v1/experiments_reproduction/cache_dirs/figure_4_more_swaps_cache_dir"
 
+        if ns == -1:
+            rearr_cuts_temp_node = e_temp.rearrange_node(node=temp_node, rearrange_params=rearr_params_cuts)
+            rearr_igtd_temp_node = e_temp.rearrange_node(node=temp_node, rearrange_params=rearr_params_igtd)
+
+            e_temp.run_baseline_node(node=rearr_cuts_temp_node, baseline_params=baseline_params_cnn)
+            e_temp.run_baseline_node(node=rearr_cuts_temp_node, baseline_params=baseline_params_s4)
+            e_temp.run_baseline_node(node=rearr_cuts_temp_node, baseline_params=baseline_params_lat)
+
+
+            e_temp.run_baseline_node(node=rearr_igtd_temp_node, baseline_params=baseline_params_cnn)
+            e_temp.run_baseline_node(node=rearr_igtd_temp_node, baseline_params=baseline_params_s4)
+            e_temp.run_baseline_node(node=rearr_igtd_temp_node, baseline_params=baseline_params_lat)
+            # [Other baseline runs]
+
+    # Save the experiment
+    save_path = "experiments_reproduction/cache_dirs/table_2_semeion_cache_dir"
     # append the seed and the device to the save path with .pkl ending
     save_path = os.path.join(save_path, f"seed_{seed}_device_{device}.pkl")
     with open(save_path, 'wb') as f:
         pickle.dump(e_temp, f)
-
 
 
 if __name__ == "__main__":
@@ -174,3 +157,5 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
     main(args.seed, args.device)
+
+
