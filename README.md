@@ -1,7 +1,7 @@
-# What Makes Data Suitable for a Locally Connected Neural Network? A Necessary and Sufficient Condition Based on Quantum Entanglement
+# What Makes Data Suitable for a Locally Connected Neural Network? A Necessary and Sufficient Condition Based on Quantum Entanglement (NeurIPS 2023)
 
 
-Code implementation for the algorithms introduced in [What Makes Data Suitable for a Locally Connected Neural Network? A Necessary and Sufficient Condition Based on Quantum Entanglement](https://arxiv.org/abs/2303.11249).
+Code implementation for the algorithms introduced in [What Makes Data Suitable for a Locally Connected Neural Network? A Necessary and Sufficient Condition Based on Quantum Entanglement](https://arxiv.org/abs/2303.11249) (NeurIPS 2023).
 
 ## Configuration
 
@@ -116,11 +116,10 @@ Tested with python 3.9.7.
 For citing the paper you can use:
 
 ```
-@article{alexander2023makes,
-      title={What Makes Data Suitable for a Locally Connected Neural Network? A Necessary and Sufficient Condition Based on Quantum Entanglement}, 
-      author={Yotam Alexander and Nimrod De La Vega and Noam Razin and Nadav Cohen},
-      year={2023},
-      journal={arXiv preprint arXiv:2303.11249}
-      year={2023}
+@inproceedings{alexander2023what,
+  title={What Makes Data Suitable for a Locally Connected Neural Network? A Necessary and Sufficient Condition Based on Quantum Entanglement},
+  author={Alexander, Yotam and De La Vega, Nimrod and Razin, Noam and Cohen, Nadav},
+  booktitle={Advances in Neural Information Processing Systems},
+  year={2023}
 }
 ```
